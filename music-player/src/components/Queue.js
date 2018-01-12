@@ -1,13 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
+import customPropTypes from '../utilities/propTypes';
+
 class Queue extends Component {
   render() {
     return (
       <Fragment>
         <h1>Queue</h1>
         <ul>
-          <li />
+          {this.props.queue.map(song => <li key={song.title}>{song.title}</li>)}
         </ul>
       </Fragment>
     );
@@ -15,7 +17,7 @@ class Queue extends Component {
 }
 
 Queue.propTypes = {
-  // songs...
+  queue: PropTypes.arrayOf(customPropTypes.song).isRequired,
 };
 
 export default Queue;

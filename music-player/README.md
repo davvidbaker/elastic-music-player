@@ -1,3 +1,11 @@
+<!-- ## Hmmm.
+My biggest question right now I guess is about using local storage or cache storage with a service worker. I believe cache storage would be better for performance and memory reasons, but I don't know if I'm allowed to this, and browser support is not 💯 [Can I use Service Workers](https://caniuse.com/#feat=serviceworkers). -->
+
+### Considerations
+- Currently can't upload multiple songs with same name, would require different keys for arrays. 
+- I would have probably used a service worker for caching uploaded files if the browser support was better.
+- I used indexedDB for persisting uploaded files, since localStorage has tighter size limits.
+
 # Prompt
 In javascript, build a simple music player application. Feel free to ape an existing music player.
 
