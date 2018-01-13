@@ -8,6 +8,8 @@ My biggest question right now I guess is about using local storage or cache stor
 - I didn't persist elapsed time to local storage, but I could.
 - The queue is actually more like a playlist―I think this is the functionality a user would expect. I did this because a queue doesn't really have a history.
 - I didn't get to writing snapshot tests or tests of any kind―only did prop type checking.
+- I didn't get to thorough cross-browser testing.
+- I didn't get to animating the UI.
 
 # Prompt
 In javascript, build a simple music player application. Feel free to ape an existing music player.

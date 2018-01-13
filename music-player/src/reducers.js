@@ -25,6 +25,13 @@ export function queue(state = [], action) {
     case actions.QUEUE_ADVANCE:
       return state.slice(1);
 
+    case actions.QUEUE_CLEAR:
+      return [];
+
+    case actions.QUEUE_REMOVE:
+      // const indexToRemove = state.findIndex(title => title === action.title);
+      return state.filter((_title, index) => index !== action.index);
+
     default:
       return state;
   }

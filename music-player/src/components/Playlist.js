@@ -42,8 +42,11 @@ class Playlist extends Component {
         <History>
           {this.props.history
             .map(title => songByTitle(title, this.props.songList))
-            .map(song => (
-              <li key={shortid.generate()}>
+            .map((song, index) => (
+              <li
+                key={shortid.generate()}
+                onDoubleClick={() => this.props.playSongFromHistory(index)}
+              >
                 <Title>{song.title}</Title>
                 {song.artist && <Artist>{song.artist}</Artist>}
                 {song.album && <Album>{song.album}</Album>}
@@ -53,10 +56,17 @@ class Playlist extends Component {
         <Upcoming>
           {this.props.queue
             .map(title => songByTitle(title, this.props.songList))
-            .map(song => (
-              <li key={shortid.generate()}>
+            .map((song, index) => (
+              <li
+                key={shortid.generate()}
+                onDoubleClick={() => this.props.playSongFromQueue(index)}
+              >
                 <Title>{song.title}</Title>
-                {song.artist && <Artist>{song.artist}</Artist>}
+                {song.artist && (
+                  <Artist beforeAlbum={Boolean(song.album)}>
+                    {song.artist}
+                  </Artist>
+                )}
                 {song.album && <Album>{song.album}</Album>}
               </li>
             ))}
@@ -70,6 +80,8 @@ Playlist.propTypes = {
   history: PropTypes.arrayOf(PropTypes.string).isRequired,
   queue: PropTypes.arrayOf(PropTypes.string).isRequired,
   songList: PropTypes.arrayOf(customPropTypes.song).isRequired,
+  playSongFromHistory: PropTypes.func.isRequired,
+  playSongFromQueue: PropTypes.func.isRequired,
 };
 
 export default Playlist;

@@ -73,7 +73,9 @@ const Library = ({ songList, openMusicForm, play, queueUp }) => (
         {songList.map(song => (
           <LI key={shortid.generate()}>
             <Title>{song.title}</Title>
-            {song.artist && <Artist>{song.artist}</Artist>}
+            {song.artist && (
+              <Artist beforeAlbum={Boolean(song.album)}>{song.artist}</Artist>
+            )}
             {song.album && <Album>{song.album}</Album>}
             <button className="play" title="Play" onClick={() => play(song)} />
             <button

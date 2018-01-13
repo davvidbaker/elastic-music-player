@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import WithEventListeners from './WithEventListeners';
 import * as colors from '../utilities/colors';
 
 const Bar = styled.div`

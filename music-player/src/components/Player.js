@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import customPropTypes from '../utilities/propTypes';
-import LoopIcon from './LoopIcon';
+// import LoopIcon from './LoopIcon';
 import NextIcon from './NextIcon';
 import PlayIcon from './PlayIcon';
 import Artist from './Artist';
@@ -16,6 +16,7 @@ const Container = styled.div`
   grid-template-columns: 2fr 1fr 1fr;
   justify-content: space-around;
   align-items: center;
+  min-height: 130px;
 `;
 
 const Controls = styled.div`
@@ -166,7 +167,11 @@ class Player extends Component {
             <div>
               <SongInfo>
                 <Title>{song.title}</Title>
-                {song.artist && <Artist>{song.artist}</Artist>}
+                {song.artist && (
+                  <Artist beforeAlbum={Boolean(song.album)}>
+                    {song.artist}
+                  </Artist>
+                )}
                 {song.album && <Album>{song.album}</Album>}
               </SongInfo>
             </div>

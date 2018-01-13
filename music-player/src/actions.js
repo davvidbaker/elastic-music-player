@@ -1,3 +1,5 @@
+export const PLAY_FROM_QUEUE = 'PLAY_FROM_QUEUE';
+export const PLAY_FROM_HISTORY = 'PLAY_FROM_HISTORY';
 export const PLAYER_LOOP_TOGGLE = 'PLAYER_LOOP_TOGGLE';
 export const PLAYER_NEXT = 'PLAYER_NEXT';
 export const PLAYER_PREV = 'PLAYER_PREV';
@@ -8,9 +10,11 @@ export const PLAYER_STOP = 'PLAYER_STOP';
 export const HISTORY_CLEAR = 'HISTORY_CLEAR';
 export const HISTORY_POP = 'HISTORY_POP';
 export const HISTORY_PUSH = 'HISTORY_PUSH';
+export const HISTORY_REMOVE = 'HISTORY_REMOVE';
 export const QUEUE_ADD = 'QUEUE_ADD';
 export const QUEUE_ADVANCE = 'QUEUE_ADVANCE';
 export const QUEUE_REMOVE = 'QUEUE_REMOVE';
+export const QUEUE_CLEAR = 'QUEUE_CLEAR';
 export const SONG_ADD = 'SONG_ADD';
 export const SONG_RECOVER = 'SONG_RECOVER';
 export const SONG_REMOVE = 'SONG_REMOVE';
@@ -42,6 +46,20 @@ export function play(song) {
   return {
     type: PLAYER_PLAY,
     song,
+  };
+}
+
+export function playSongFromHistory(index) {
+  return {
+    type: PLAY_FROM_HISTORY,
+    index,
+  };
+}
+
+export function playSongFromQueue(index) {
+  return {
+    type: PLAY_FROM_QUEUE,
+    index,
   };
 }
 
@@ -79,10 +97,17 @@ export function addToQueue(title) {
   };
 }
 
-export function removeFromQueue(title) {
+export function removeFromQueue(index) {
   return {
     type: QUEUE_REMOVE,
-    title,
+    index,
+  };
+}
+
+export function removeFromHistory(index) {
+  return {
+    type: HISTORY_REMOVE,
+    index,
   };
 }
 
@@ -128,5 +153,11 @@ export function popHistory() {
 export function clearHistory() {
   return {
     type: HISTORY_CLEAR,
+  };
+}
+
+export function clearQueue() {
+  return {
+    type: QUEUE_CLEAR,
   };
 }

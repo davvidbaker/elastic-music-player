@@ -145,9 +145,14 @@ class App extends Component {
                   queue={this.props.queue}
                   history={this.props.history}
                   songList={this.props.songList}
+                  playSongFromHistory={this.props.playSongFromHistory}
+                  playSongFromQueue={this.props.playSongFromQueue}
                 />
                 <BigButton onClick={this.props.clearHistory}>
                   Clear History
+                </BigButton>
+                <BigButton onClick={this.props.clearQueue}>
+                  Clear Queue
                 </BigButton>
                 {this.props.filesUploading.map(filename => (
                   <FileUpload
@@ -187,8 +192,11 @@ export default connect(
       dispatch(actions.addSong({ title, artist, album, objectURL })),
     beginUpload: title => dispatch(actions.beginUpload(title)),
     clearHistory: () => dispatch(actions.clearHistory()),
+    clearQueue: () => dispatch(actions.clearQueue()),
     pause: () => dispatch(actions.pause()),
     play: song => dispatch(actions.play(song)),
+    playSongFromHistory: index => dispatch(actions.playSongFromHistory(index)),
+    playSongFromQueue: index => dispatch(actions.playSongFromQueue(index)),
     playerNext: () => dispatch(actions.playerNext()),
     playerPrev: sec => dispatch(actions.playerPrev(sec)),
     playerResume: () => dispatch(actions.playerResume()),

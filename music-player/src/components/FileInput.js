@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 class FileInput extends Component {
   render() {
     return (
-      <label>
+      <label style={{ marginBottom: '1em' }}>
         File:
         <input
           type="file"

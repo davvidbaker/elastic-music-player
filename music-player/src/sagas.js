@@ -54,10 +54,24 @@ function* prev({ sec }) {
   }
 }
 
+function* fromHistory({ title }) {}
+
+function* fromQueue({ index }) {
+  const state = yield select();
+
+  const title = state.queue[index];
+  yield put(actions.removeFromQueue(index));
+
+  const songToPlay = songByTitle(title, state.songList);
+  yield put(actions.play(songToPlay));
+}
+
 function* mainSaga() {
   yield takeEvery(actions.PLAYER_NEXT, next);
   yield takeLatest(actions.PLAYER_RESUME, resume);
   yield takeEvery(actions.PLAYER_PREV, prev);
+  yield takeEvery(actions.PLAY_FROM_HISTORY, fromHistory);
+  yield takeEvery(actions.PLAY_FROM_QUEUE, fromQueue);
 }
 
 export default mainSaga;

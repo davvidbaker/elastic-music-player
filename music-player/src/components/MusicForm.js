@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import BigButton from './BigButton';
 
 import FileInput from './FileInput';
 
@@ -108,13 +109,9 @@ class MusicForm extends Component {
             onChange={this.handleChooseFile}
             inputRef={el => (this.fileInput = el)}
           />
-          <button
-            style={{ textAlign: 'right' }}
-            type="submit"
-            ref={btn => (this.submitBtn = btn)}
-          >
+          <BigButton type="submit" innerRef={btn => (this.submitBtn = btn)}>
             Submit
-          </button>
+          </BigButton>
         </Form>
       </Modal>
     );
