@@ -50,11 +50,19 @@ class FileUpload extends Component {
       };
 
       transaction.onabort = e => {
-        alert(`Transaction aborted: ${e}.`);
+        alert(
+          `Transaction aborted: ${
+            e.message
+          }. Persistent storage on your browser is going to be wonky. Don't expect it to work!`
+        );
       };
 
       transaction.onerror = e => {
-        alert(`Transaction errored: ${e}.`);
+        alert(
+          `Transaction errored: ${
+            e.message
+          }. Persistent storage on your browser is going to be wonky. Don't expect it to work!`
+        );
       };
     };
 
