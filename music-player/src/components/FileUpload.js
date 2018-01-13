@@ -45,12 +45,6 @@ class FileUpload extends Component {
           this.props.completeUpload(this.props.title);
         }, 2000);
       };
-      // this.props.songObjectStore.add({
-      //   title: this.props.file.name,
-      //   value: arrayBuffer,
-      // });
-
-      // hidethe progress bar 2 seconds after upload completes
     };
 
     this.reader.readAsArrayBuffer(this.props.file);
@@ -87,7 +81,9 @@ class FileUpload extends Component {
 }
 
 FileUpload.propTypes = {
-  // TODO
+  title: PropTypes.string.isRequired,
+  db: PropTypes.instanceOf(IDBDatabase).isRequired,
+  file: PropTypes.instanceOf(File).isRequired,
 };
 export default connect(null, dispatch => ({
   completeUpload: filename => dispatch(actions.completeUpload(filename)),

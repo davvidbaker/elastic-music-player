@@ -5,6 +5,9 @@ My biggest question right now I guess is about using local storage or cache stor
 - Currently can't upload multiple songs with same name, would require different keys for arrays. 
 - I would have probably used a service worker for caching uploaded files if the browser support was better.
 - I used indexedDB for persisting uploaded files, since localStorage has tighter size limits.
+- I didn't persist elapsed time to local storage, but I could.
+- The queue is actually more like a playlist―I think this is the functionality a user would expect. I did this because a queue doesn't really have a history.
+- I didn't get to writing snapshot tests or tests of any kind―only did prop type checking.
 
 # Prompt
 In javascript, build a simple music player application. Feel free to ape an existing music player.

@@ -9,7 +9,7 @@ class FileInput extends Component {
         File:
         <input
           type="file"
-          accept="audio/*"
+          accept="audio/mp3"
           ref={this.props.inputRef}
           onChange={this.props.onChange}
           required

@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { injectGlobal } from 'styled-components';
+import styled, { injectGlobal } from 'styled-components';
 import { connect } from 'react-redux';
 
-import Button from '../components/Button';
+import BigButton from '../components/BigButton';
 import FileUpload from '../components/FileUpload';
 import Header from '../components/Header';
 import Library from '../components/Library';
 import MusicForm from '../components/MusicForm';
 import Player from '../components/Player';
-import Queue from '../components/Queue';
+import Playlist from '../components/Playlist';
+import Visualizer from '../components/Visualizer';
+import WithEventListeners from '../components/WithEventListeners';
 import initiateDB from '../utilities/indexedDB';
 
 import * as actions from '../actions';
@@ -21,6 +23,7 @@ html {
 
 *, *::before, *::after {
   box-sizing: inherit;
+  user-select: none;
 }
 
 body {
@@ -32,7 +35,17 @@ body {
 ul {
   list-style: none;
   padding: 0;
+  margin-top: 0;
 }
+`;
+
+const Main = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  h1 {
+    margin-bottom: 0.25em;
+  }
 `;
 
 class App extends Component {
@@ -44,6 +57,21 @@ class App extends Component {
 
   async componentDidMount() {
     this.db = await initiateDB();
+    const transaction = this.db.transaction('songs');
+    const songObjectStore = transaction.objectStore('songs');
+    const all = songObjectStore.getAll();
+
+    transaction.oncomplete = evt => {
+      if (all.readyState === 'done') {
+        console.log('all.result', all.result);
+        all.result.forEach(entry => {
+          const typedArray = new Uint8Array(entry.value);
+          const blob = new Blob([typedArray], { type: 'audio/mp3' });
+          const url = URL.createObjectURL(blob);
+          this.props.recoverSong(entry.title, url);
+        });
+      }
+    };
   }
 
   openMusicForm = () => {
@@ -55,8 +83,6 @@ class App extends Component {
   };
 
   submitNewMusic = ({ title, artist, album, file }) => {
-    console.log('formdata', title, artist, album, file);
-
     const objectURL = URL.createObjectURL(file);
     this.props.addSong({ title, artist, album, objectURL });
     this.closeMusicForm();
@@ -66,48 +92,112 @@ class App extends Component {
   };
 
   render() {
+    const nextEnabled = Boolean(
+      this.props.queue.length > 0 || this.props.currentSong
+    );
+
+    const eventListeners = [
+      [
+        'keydown',
+        e => {
+          if (e.code === 'Space' && e.target.nodeName !== 'INPUT') {
+            if (this.props.queue.length > 0 || this.props.currentSong) {
+              this.props.togglePlaying(this.props.playing);
+            }
+          }
+        },
+      ],
+    ];
+
     return (
-      <div className="App">
-        <Header>
-          <Player currentSong={this.props.currentSong} />
-        </Header>
-        <Library
-          songList={this.props.songList}
-          openMusicForm={this.openMusicForm}
-        />
-        <Queue queue={this.props.queue} />
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <Button onClick={this.openMusicForm}>Add Music</Button>
-        {this.props.filesUploading.map(filename => (
-          <FileUpload
-            file={this.files[filename]}
-            title={filename}
-            key={filename}
-            db={this.db}
-          />
-        ))}
-        <MusicForm
-          isOpen={this.state.formOpen}
-          closeForm={this.closeMusicForm}
-          submit={this.submitNewMusic}
-        />
-      </div>
+      <WithEventListeners node={document} eventListeners={eventListeners}>
+        {() => (
+          <div>
+            <Header>
+              <Player
+                currentSong={this.props.currentSong}
+                looping={this.props.looping}
+                next={this.props.playerNext}
+                nextEnabled={nextEnabled}
+                pause={this.props.pause}
+                playing={this.props.playing}
+                prev={this.props.playerPrev}
+                prevEnabled={Boolean(
+                  this.props.history.length > 0 || this.props.currentSong
+                )}
+                resume={this.props.playerResume}
+                toggleLooping={this.props.toggleLooping}
+              />
+            </Header>
+            <Main>
+              <div style={{ marginLeft: '20px' }}>
+                <Library
+                  songList={this.props.songList}
+                  openMusicForm={this.openMusicForm}
+                  play={this.props.play}
+                  queueUp={this.props.queueUp}
+                />
+                <div style={{ textAlign: 'right' }}>
+                  <BigButton onClick={this.openMusicForm}>Add Music</BigButton>
+                </div>
+                <hr />
+                <Playlist
+                  queue={this.props.queue}
+                  history={this.props.history}
+                  songList={this.props.songList}
+                />
+                <BigButton onClick={this.props.clearHistory}>
+                  Clear History
+                </BigButton>
+                {this.props.filesUploading.map(filename => (
+                  <FileUpload
+                    file={this.files[filename]}
+                    title={filename}
+                    key={filename}
+                    db={this.db}
+                  />
+                ))}
+              </div>
+              <Visualizer />
+            </Main>
+            <MusicForm
+              isOpen={this.state.formOpen}
+              closeForm={this.closeMusicForm}
+              submit={this.submitNewMusic}
+            />
+          </div>
+        )}
+      </WithEventListeners>
     );
   }
 }
 
 export default connect(
   state => ({
-    filesUploading: state.filesUploading,
-    songList: state.songList,
-    queue: state.queue,
     currentSong: state.currentSong,
+    filesUploading: state.filesUploading,
+    history: state.history,
+    looping: state.looping,
+    playing: state.playing,
+    queue: state.queue,
+    songList: state.songList,
   }),
   dispatch => ({
     addSong: ({ title, artist, album, objectURL }) =>
       dispatch(actions.addSong({ title, artist, album, objectURL })),
     beginUpload: title => dispatch(actions.beginUpload(title)),
+    clearHistory: () => dispatch(actions.clearHistory()),
+    pause: () => dispatch(actions.pause()),
+    play: song => dispatch(actions.play(song)),
+    playerNext: () => dispatch(actions.playerNext()),
+    playerPrev: sec => dispatch(actions.playerPrev(sec)),
+    playerResume: () => dispatch(actions.playerResume()),
+    togglePlaying: playing =>
+      dispatch(playing ? actions.pause() : actions.playerResume()),
+    recoverSong: (title, objectURL) =>
+      dispatch(actions.recoverSong(title, objectURL)),
+    stop: () => dispatch(actions.stop()),
+    toggleLooping: () => dispatch(actions.toggleLooping()),
+    queueUp: title => dispatch(actions.addToQueue(title)),
   })
 )(App);
