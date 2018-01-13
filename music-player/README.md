@@ -4,7 +4,7 @@ My biggest question right now I guess is about using local storage or cache stor
 ### Considerations
 - Currently there is a bug if you upload multiple songs with same name, would require different keys for arrays. Would require a little refactoring.
 - I would have probably used a service worker for caching uploaded files if the browser support was better.
-- I used indexedDB for persisting uploaded files, since localStorage has tighter size limits.
+- I used indexedDB for persisting uploaded files, since localStorage has tighter size limits. DOes not gracefully handle lack of indexeddb.
 - I didn't persist elapsed time to local storage, but I could.
 - I don't keep track of forward history. If you go to the previous song, the current song is not added back to the queue. I wasn't sure if it should be.
 - I didn't get to writing snapshot tests or tests of any kind―only did prop type checking.
