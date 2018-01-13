@@ -63,7 +63,7 @@ class App extends Component {
 
     transaction.oncomplete = evt => {
       if (all.readyState === 'done') {
-        console.log('all.result', all.result);
+        console.log('loading from database:', all.result);
         all.result.forEach(entry => {
           const typedArray = new Uint8Array(entry.value);
           const blob = new Blob([typedArray], { type: 'audio/mp3' });

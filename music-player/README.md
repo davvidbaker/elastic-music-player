@@ -2,14 +2,17 @@
 My biggest question right now I guess is about using local storage or cache storage with a service worker. I believe cache storage would be better for performance and memory reasons, but I don't know if I'm allowed to this, and browser support is not 💯 [Can I use Service Workers](https://caniuse.com/#feat=serviceworkers). -->
 
 ### Considerations
-- Currently can't upload multiple songs with same name, would require different keys for arrays. 
+- Currently there is a bug if you upload multiple songs with same name, would require different keys for arrays. Would require a little refactoring.
 - I would have probably used a service worker for caching uploaded files if the browser support was better.
 - I used indexedDB for persisting uploaded files, since localStorage has tighter size limits.
 - I didn't persist elapsed time to local storage, but I could.
-- The queue is actually more like a playlist―I think this is the functionality a user would expect. I did this because a queue doesn't really have a history.
+- I don't keep track of forward history. If you go to the previous song, the current song is not added back to the queue. I wasn't sure if it should be.
 - I didn't get to writing snapshot tests or tests of any kind―only did prop type checking.
 - I didn't get to thorough cross-browser testing.
 - I didn't get to animating the UI.
+- There is definitely a lack of consistency in using styled components vs inline styles. This was done out of haste.
+- Not mobile optimized.
+
 
 # Prompt
 In javascript, build a simple music player application. Feel free to ape an existing music player.

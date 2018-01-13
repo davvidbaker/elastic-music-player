@@ -29,7 +29,6 @@ export function queue(state = [], action) {
       return [];
 
     case actions.QUEUE_REMOVE:
-      // const indexToRemove = state.findIndex(title => title === action.title);
       return state.filter((_title, index) => index !== action.index);
 
     default:
@@ -46,6 +45,8 @@ export function history(state = [], action) {
       return state.slice(1);
     case actions.HISTORY_CLEAR:
       return [];
+    case actions.HISTORY_REMOVE:
+      return state.filter((_title, index) => index !== action.index);
 
     default:
       return state;

@@ -48,7 +48,11 @@ class Playlist extends Component {
                 onDoubleClick={() => this.props.playSongFromHistory(index)}
               >
                 <Title>{song.title}</Title>
-                {song.artist && <Artist>{song.artist}</Artist>}
+                {song.artist && (
+                  <Artist beforeAlbum={Boolean(song.album)}>
+                    {song.artist}
+                  </Artist>
+                )}
                 {song.album && <Album>{song.album}</Album>}
               </li>
             ))}

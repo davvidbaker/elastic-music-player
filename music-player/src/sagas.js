@@ -54,7 +54,15 @@ function* prev({ sec }) {
   }
 }
 
-function* fromHistory({ title }) {}
+function* fromHistory({ index }) {
+  const state = yield select();
+
+  const title = state.history[index];
+  yield put(actions.removeFromHistory(index));
+
+  const songToPlay = songByTitle(title, state.songList);
+  yield put(actions.play(songToPlay));
+}
 
 function* fromQueue({ index }) {
   const state = yield select();

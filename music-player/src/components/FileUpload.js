@@ -1,4 +1,4 @@
-/** 💁 We are talking about uploading to local storage, not some remote server. */
+/** 💁 We are talking about uploading to indexedDB, not some remote server. */
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -8,8 +8,11 @@ import PropTypes from 'prop-types';
 import * as actions from '../actions';
 
 const ProgressBar = styled.div`
+  position: fixed;
+  bottom: 0;
+  right: 0;
   width: 20vw;
-  height: 30px;
+  height: 1.5em;
   border: 1px solid black;
 
   div {
@@ -30,11 +33,11 @@ class FileUpload extends Component {
     this.reader.onabort = e => {
       alert('File read cancelled');
     };
+
     this.reader.onload = progressEvent => {
+      console.log('progressEvent', progressEvent);
       this.setState({ percent: 100 });
       const arrayBuffer = progressEvent.target.result;
-      console.log('arrayBuffer', arrayBuffer);
-      console.log('db in fileupload', this.props.db);
 
       const transaction = this.props.db.transaction('songs', 'readwrite');
       const songObjectStore = transaction.objectStore('songs');
@@ -44,6 +47,14 @@ class FileUpload extends Component {
         setTimeout(() => {
           this.props.completeUpload(this.props.title);
         }, 2000);
+      };
+
+      transaction.onabort = e => {
+        alert(`Transaction aborted: ${e}.`);
+      };
+
+      transaction.onerror = e => {
+        alert(`Transaction errored: ${e}.`);
       };
     };
 
@@ -66,6 +77,7 @@ class FileUpload extends Component {
   }
 
   updateProgress = progressEvent => {
+    console.log('progressEvent', progressEvent);
     if (progressEvent.lengthComputable) {
       this.setState({ percent: progressEvent.loaded / progressEvent.total });
     }
@@ -74,6 +86,7 @@ class FileUpload extends Component {
   render() {
     return (
       <ProgressBar>
+        <div style={{ position: 'absolute' }}>Uploading {this.props.title}</div>
         <div style={{ width: `${this.state.percent}%` }} />
       </ProgressBar>
     );

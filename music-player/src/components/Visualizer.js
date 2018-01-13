@@ -23,15 +23,12 @@ class Visualizer extends Component {
       audioEl.addEventListener(
         'canplay',
         () => {
-          // audioEl.play();
-          // console.log('can play');
           let audioSrc = audioContext.createMediaElementSource(audioEl);
           audioSrc.connect(audioContext.destination);
           audioSrc.connect(analyser);
         },
         { once: true }
       );
-      console.log(audioContext);
     })();
 
     /* ============================================================================== 

@@ -67,8 +67,12 @@ class MusicForm extends Component {
     e.preventDefault();
 
     // TODO maybe
-    if (!this.fileInput.files[0].type.match(/audio\/mp3/)) {
-      alert('Sorry! We only accept mp3 files right now!');
+    if (!this.fileInput.files[0].type.match(/audio\/mp.*/)) {
+      alert(
+        `Sorry! We only accept mp3 files right now! Your file was of type: ${
+          this.fileInput.files[0].type
+        }`
+      );
     } else {
       const data = { ...this.state, file: this.fileInput.files[0] };
       this.props.submit(data);

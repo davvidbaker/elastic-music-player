@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 class FileInput extends Component {
   render() {
     return (
-      <label style={{ marginBottom: '1em' }}>
-        File:
+      <label>
+        File:{' '}
         <input
           type="file"
           accept="audio/mp3"
